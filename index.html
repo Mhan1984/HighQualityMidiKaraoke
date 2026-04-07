@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>High Quality MIDI Karaoke Tracks 2026</title>
+<script src="https://cdn.jsdelivr.net/gh/mudcube/MIDI.js/midi.js"></script>
+<style>
+body { font-family: Arial; background:#111; color:white; text-align:center; }
+header { background:#ff0000; padding:15px; font-size:30px; font-weight:bold; }
+button { padding:10px 20px; margin:10px; border:none; border-radius:5px; background:#00ffcc; cursor:pointer; }
+button:hover { background:#00e6b8; }
+.midi-list { margin:20px auto; width:80%; text-align:left; }
+</style>
+</head>
+<body>
+
+<header>🎤 High Quality Midi Karaoke</header>
+
+<button onclick="showAllMIDIs()">All MIDIs</button>
+
+<div class="midi-list" id="midiList"></div>
+
+<script>
+// MIDI files (relative to your server root)
+const midis = [
+    "EmmanMidi/One Direction - CHANGE MY MINE (Karaoke).mid",
+    "EmmanMidi/ADELE - SKYFALL (Karaoke).mid",
+    "EmmanMidi/AMERICA - SISTER GOLDEN HAIR (Karaoke).mid"
+];
+
+let midiLoaded = false;
+
+// Load SoundFont once
+MIDI.loadPlugin({
+    soundfontUrl: "https://cdn.jsdelivr.net/gh/mudcube/MIDI.js/soundfonts/FluidR3_GM/",
+    onsuccess: function() {
+        console.log("MIDI.js ready!");
+        midiLoaded = true;
+    }
+});
+
+function showAllMIDIs() {
+    const listDiv = document.getElementById("midiList");
+    listDiv.innerHTML = "";
+
+    midis.forEach(filePath => {
+        const fileName = filePath.split("/").pop();
+        const btn = document.createElement("button");
+        btn.innerHTML = "▶ " + fileName;
+
+        btn.onclick = () => {
+            if (!midiLoaded) {
+                alert("MIDI.js still loading SoundFont...");
+                return;
+            }
+            MIDI.Player.stop();
+            MIDI.Player.loadFile(filePath, () => {
+                MIDI.Player.start();
+            });
+        };
+
+        listDiv.appendChild(btn);
+    });
+}
+</script>
+
+</body>
+</html>
